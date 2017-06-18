@@ -1,0 +1,10 @@
+[package]
+name = "rsteg"
+version = "0.1.0"
+authors = ["Jake Robertson <jake@faltro.com>"]
+
+[dependencies]
+getopts = "0.2.14"
+image = "0.14.0"
+bit-vec = "0.4.4"
+byteorder = "1.0.0"
