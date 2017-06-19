@@ -145,8 +145,6 @@ pub fn encode(cover_filename: &String, payload_filename: &String,
     let cover_img = image_from_file(cover_filename);
     let payload = read_file_bytes(payload_filename);
 
-    let (width, height) = cover_img.dimensions();
-
     // get file size as bitvec
     let payload_size: u32 = payload.len() as u32;
     let size_bits = bit_vec_from_u32(payload_size);
@@ -156,6 +154,13 @@ pub fn encode(cover_filename: &String, payload_filename: &String,
 
     // combine bitvecs
     let data_bits = combine_bit_vecs(&size_bits, &payload_bits);
+
+    // determine if image is large enough to hold payload
+    let (width, height) = cover_img.dimensions();
+    let max_encoded_bits = channels * (width * height) as usize;
+    if data_bits.len() > max_encoded_bits {
+        panic!("Image is too small to encode payload");
+    }
 
     // encode bits into new image
     let mut new_img = ImageBuffer::new(width, height);
